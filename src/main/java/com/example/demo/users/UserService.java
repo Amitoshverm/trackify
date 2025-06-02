@@ -46,6 +46,34 @@ public class UserService {
         return userResponses;
    }
 
-   public
+   public UserResponseDto getUserById(Long id) {
+        User user = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        UserResponseDto userResponseDto = new UserResponseDto();
+       userResponseDto.setId(user.getId());
+        userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setName(user.getName());
+        return userResponseDto;
+   }
+
+   public UserResponseDto updateUser(Long id, UserDto userDto) {
+        User user = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id : " + id));
+        user.setPassword(userDto.getPassword());
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+
+        this.userRepository.save(user);
+
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(user.getId());
+        userResponseDto.setName(user.getName());
+        userResponseDto.setEmail(user.getEmail());
+        return userResponseDto;
+   }
+
+   public void deleteUser(Long id) {
+        User user = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id : " + id));
+        this.userRepository.delete(user);
+   }
 }
 
